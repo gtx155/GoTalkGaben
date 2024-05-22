@@ -30,7 +30,7 @@ func main() {
 	ebiten.SetWindowTitle("GoTalkGaben")
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeDisabled)
 
-	validListEntries := []interface{}{"gaben", "two", "welcome", "i'm", "dota", "blood", "double", "first", "fun", "have", "kill", "thanks", "achived", "have", "playing", "this", "you"}
+	validListEntries := []interface{}{"gaben", "two", "welcome", "i'm", "dota", "blood", "double", "first", "fun", "have", "kill", "thanks", "achived", "have", "playing", "this", "you", "performance", "dominating"}
 	var invalidInputs []string
 
 	// valid words taken from validListEntries to be used by playAudio
