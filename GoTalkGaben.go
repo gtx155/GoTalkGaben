@@ -21,16 +21,22 @@ type game struct {
 	ui *ebitenui.UI
 }
 
-type ListEntry struct {
-	Word string
-}
-
 func main() {
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("GoTalkGaben")
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeDisabled)
 
-	validListEntries := []interface{}{"gaben", "two", "welcome", "i'm", "dota", "blood", "double", "first", "fun", "have", "kill", "thanks", "achived", "have", "playing", "this", "you", "performance", "dominating"}
+	validListEntries := []interface{}{
+		"gaben", "two", "welcome",
+		"i'm", "dota", "blood",
+		"double", "first", "fun",
+		"have", "kill", "thanks",
+		"achived", "have", "playing",
+		"this", "you", "performance",
+		"dominating", "beautiful", "charming",
+		"person", "personality", "with",
+		"you're"}
+
 	var invalidInputs []string
 
 	// valid words taken from validListEntries to be used by playAudio
@@ -40,10 +46,6 @@ func main() {
 	for _, entry := range validListEntries {
 		// Convert the entry to lowercase and add it to the map
 		validValues[strings.ToLower(entry.(string))] = true
-	}
-
-	for key, value := range validValues {
-		fmt.Printf("%s: %t\n", key, value)
 	}
 
 	var bgColor = color.NRGBA{
@@ -200,6 +202,20 @@ func main() {
 
 	rootContainer.AddChild(audioButton)
 
+	smallFace, _ := loadFont(20)
+
+	labelValidWords := widget.NewText(
+		widget.TextOpts.Text("Valid Words List", smallFace, textColor),
+		widget.TextOpts.Position(widget.TextPositionCenter, widget.TextPositionCenter),
+		widget.TextOpts.WidgetOpts(
+			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
+				Position: widget.RowLayoutPositionCenter,
+			}),
+		),
+	)
+	// Add the first Text as a child of the container
+	rootContainer.AddChild(labelValidWords)
+
 	listsContainer := widget.NewContainer(
 		widget.ContainerOpts.WidgetOpts(widget.WidgetOpts.LayoutData(widget.RowLayoutData{
 			Stretch: true,
@@ -207,11 +223,11 @@ func main() {
 		widget.ContainerOpts.Layout(widget.NewGridLayout(
 			widget.GridLayoutOpts.Columns(1),
 			widget.GridLayoutOpts.Stretch([]bool{true}, []bool{true}),
-			widget.GridLayoutOpts.Spacing(10, 0))))
+			widget.GridLayoutOpts.Spacing(15, 0))))
 	rootContainer.AddChild(listsContainer)
 
 	listValid := newList(validListEntries, face, buttonImage, widget.WidgetOpts.LayoutData(widget.GridLayoutData{
-		MaxHeight: 150,
+		MaxHeight: 225,
 	}))
 	listsContainer.AddChild(listValid)
 
@@ -314,7 +330,6 @@ func newList(entries []interface{}, face font.Face, buttonImage *widget.ButtonIm
 			SelectedFocusedBackground:  color.NRGBA{R: 135, G: 73, B: 59, A: 255},   // Background color for the focused selected entry
 			FocusedBackground:          color.NRGBA{R: 145, G: 73, B: 59, A: 255},   // Background color for the focused unselected entry
 		}),
-		// REMAKE AS A STRUCT ADD BOOL TYPE FOR INVALID/VALID AND ON SELECT ADD TO INPUT BOX
 		/*widget.ListOpts.EntrySelectedHandler(func(args *widget.ListEntrySelectedEventArgs) {
 			entry := args.Entry.(ListEntry)
 			fmt.Println("Entry Selected: ", entry)
@@ -386,7 +401,6 @@ func windowPopup(face font.Face, invalidInputs []string, eui *ebitenui.UI) {
 	r := image.Rect(0, 0, x, y)
 	//Use the Add method to move the window to the specified point
 	r = r.Add(image.Point{200, 150})
-	fmt.Println(r)
 	//Set the windows location to the rect.
 	window.SetLocation(r)
 	//Add the window to the UI.
